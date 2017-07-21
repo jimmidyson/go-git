@@ -34,8 +34,13 @@ func InstallProtocol(scheme string, c transport.Transport) {
 // NewClient returns the appropriate client among of the set of known protocols:
 // http://, https://, ssh:// and file://.
 // See `InstallProtocol` to add or modify protocols.
-func NewClient(endpoint transport.Endpoint) (transport.Transport, error) {
-	f, ok := Protocols[endpoint.Protocol()]
+func NewClient(endpoint transport.Endpoint, protocols map[string]transport.Transport) (transport.Transport, error) {
+	f, ok := protocols[endpoint.Protocol()]
+	if ok && f != nil {
+		return f, nil
+	}
+
+	f, ok = Protocols[endpoint.Protocol()]
 	if !ok {
 		return nil, fmt.Errorf("unsupported scheme %q", endpoint.Protocol())
 	}

@@ -392,6 +392,7 @@ func (r *Repository) clone(o *CloneOptions) error {
 		Depth:    o.Depth,
 		Auth:     o.Auth,
 		Progress: o.Progress,
+		Clients:  o.Clients,
 	})
 	if err != nil {
 		return err
@@ -582,6 +583,7 @@ func (r *Repository) Pull(o *PullOptions) error {
 		Depth:    o.Depth,
 		Auth:     o.Auth,
 		Progress: o.Progress,
+		Clients: o.Clients,
 	})
 
 	updated := true

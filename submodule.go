@@ -204,7 +204,7 @@ func (s *Submodule) doRecursiveUpdate(r *Repository, o *SubmoduleUpdateOptions) 
 
 func (s *Submodule) fetchAndCheckout(r *Repository, o *SubmoduleUpdateOptions, hash plumbing.Hash) error {
 	if !o.NoFetch {
-		err := r.Fetch(&FetchOptions{})
+		err := r.Fetch(&FetchOptions{Clients: o.Clients})
 		if err != nil && err != NoErrAlreadyUpToDate {
 			return err
 		}

@@ -73,7 +73,7 @@ func (r *Remote) Push(o *PushOptions) (err error) {
 		return fmt.Errorf("remote names don't match: %s != %s", o.RemoteName, r.c.Name)
 	}
 
-	s, err := newSendPackSession(r.c.URL, o.Auth)
+	s, err := newSendPackSession(r.c.URL, o.Auth, o.Clients)
 	if err != nil {
 		return err
 	}
@@ -147,7 +147,7 @@ func (r *Remote) fetch(o *FetchOptions) (storer.ReferenceStorer, error) {
 		o.RefSpecs = r.c.Fetch
 	}
 
-	s, err := newUploadPackSession(r.c.URL, o.Auth)
+	s, err := newUploadPackSession(r.c.URL, o.Auth, o.Clients)
 	if err != nil {
 		return nil, err
 	}
@@ -198,8 +198,8 @@ func (r *Remote) fetch(o *FetchOptions) (storer.ReferenceStorer, error) {
 	return remoteRefs, nil
 }
 
-func newUploadPackSession(url string, auth transport.AuthMethod) (transport.UploadPackSession, error) {
-	c, ep, err := newClient(url)
+func newUploadPackSession(url string, auth transport.AuthMethod, protocols map[string]transport.Transport) (transport.UploadPackSession, error) {
+	c, ep, err := newClient(url, protocols)
 	if err != nil {
 		return nil, err
 	}
@@ -207,8 +207,8 @@ func newUploadPackSession(url string, auth transport.AuthMethod) (transport.Uplo
 	return c.NewUploadPackSession(ep, auth)
 }
 
-func newSendPackSession(url string, auth transport.AuthMethod) (transport.ReceivePackSession, error) {
-	c, ep, err := newClient(url)
+func newSendPackSession(url string, auth transport.AuthMethod, protocols map[string]transport.Transport) (transport.ReceivePackSession, error) {
+	c, ep, err := newClient(url, protocols)
 	if err != nil {
 		return nil, err
 	}
@@ -216,13 +216,13 @@ func newSendPackSession(url string, auth transport.AuthMethod) (transport.Receiv
 	return c.NewReceivePackSession(ep, auth)
 }
 
-func newClient(url string) (transport.Transport, transport.Endpoint, error) {
+func newClient(url string, protocols map[string]transport.Transport) (transport.Transport, transport.Endpoint, error) {
 	ep, err := transport.NewEndpoint(url)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	c, err := client.NewClient(ep)
+	c, err := client.NewClient(ep, protocols)
 	if err != nil {
 		return nil, nil, err
 	}

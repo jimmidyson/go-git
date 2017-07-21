@@ -50,6 +50,8 @@ type CloneOptions struct {
 	// stored, if nil nothing is stored and the capability (if supported)
 	// no-progress, is sent to the server to avoid send this information.
 	Progress sideband.Progress
+
+	Clients map[string]transport.Transport
 }
 
 // Validate validates the fields and sets the default values.
@@ -88,6 +90,8 @@ type PullOptions struct {
 	// stored, if nil nothing is stored and the capability (if supported)
 	// no-progress, is sent to the server to avoid send this information.
 	Progress sideband.Progress
+
+	Clients map[string]transport.Transport
 }
 
 // Validate validates the fields and sets the default values.
@@ -132,6 +136,8 @@ type FetchOptions struct {
 	// Tags describe how the tags will be fetched from the remote repository,
 	// by default is TagFollowing.
 	Tags TagFetchMode
+
+	Clients map[string]transport.Transport
 }
 
 // Validate validates the fields and sets the default values.
@@ -158,6 +164,8 @@ type PushOptions struct {
 	RefSpecs []config.RefSpec
 	// Auth credentials, if required, to use with the remote repository.
 	Auth transport.AuthMethod
+
+	Clients map[string]transport.Transport
 }
 
 // Validate validates the fields and sets the default values.
@@ -192,6 +200,8 @@ type SubmoduleUpdateOptions struct {
 	// the current repository but also in any nested submodules inside those
 	// submodules (and so on). Until the SubmoduleRescursivity is reached.
 	RecurseSubmodules SubmoduleRescursivity
+
+	Clients map[string]transport.Transport
 }
 
 // CheckoutOptions describes how a checkout 31operation should be performed.

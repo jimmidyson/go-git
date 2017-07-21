@@ -20,7 +20,7 @@ func (s *ClientSuite) TestNewClientSSH(c *C) {
 	e, err := transport.NewEndpoint("ssh://github.com/src-d/go-git")
 	c.Assert(err, IsNil)
 
-	output, err := NewClient(e)
+	output, err := NewClient(e, nil)
 	c.Assert(err, IsNil)
 	c.Assert(output, NotNil)
 }
@@ -29,7 +29,7 @@ func (s *ClientSuite) TestNewClientUnknown(c *C) {
 	e, err := transport.NewEndpoint("unknown://github.com/src-d/go-git")
 	c.Assert(err, IsNil)
 
-	_, err = NewClient(e)
+	_, err = NewClient(e, nil)
 	c.Assert(err, NotNil)
 }
 
@@ -38,7 +38,7 @@ func (s *ClientSuite) TestNewClientNil(c *C) {
 	e, err := transport.NewEndpoint("newscheme://github.com/src-d/go-git")
 	c.Assert(err, IsNil)
 
-	_, err = NewClient(e)
+	_, err = NewClient(e, nil)
 	c.Assert(err, NotNil)
 }
 
